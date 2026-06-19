@@ -2,7 +2,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends ,HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-
+from ..Agents.test_Agent import chat
 from ..db.database import get_db
 from ..models.conversation_model import Conversation
 from ..schema.conversation_schema import (
@@ -30,7 +30,7 @@ async def create_conversation(
 ):
     
     db_conversation = Conversation(
-        title=conversation.title,
+        title= conversation.title,
         user_id = currents.id
     )
     db.add(db_conversation)

@@ -6,13 +6,12 @@ from ..db.database import get_db
 from ..models.messages_model import Message
 from ..models.conversation_model import Conversation
 from ..schema.message_schema import MessageCreate , MessageResponse
-
+from ..Agents.test_Agent import chat
 from uuid import UUID
 
 router = APIRouter(
     tags=["message"]
 )
-
 @router.post(
     "/api/conversation/{conversation_id}/message",
     response_model=MessageResponse
@@ -38,15 +37,28 @@ async def create_message(
             detail="Conversation not found"
         )
 
-    db_message = Message(
+    # Save user message
+    user_message = Message(
         conversation_id=conversation_id,
         role="user",
         content=message.content
     )
 
-    db.add(db_message)
-
+    db.add(user_message)
     await db.commit()
-    await db.refresh(db_message)
 
-    return db_message
+    # Generate AI response
+    ai_response = chat(message.content)
+
+    # Save assistant response
+    assistant_message = Message(
+        conversation_id=conversation_id,
+        role="assistant",
+        content=ai_response
+    )
+
+    db.add(assistant_message)
+    await db.commit()
+    await db.refresh(assistant_message)
+
+    return assistant_message
