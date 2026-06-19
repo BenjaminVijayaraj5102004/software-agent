@@ -5,15 +5,17 @@ from ..db.database import get_db , Base , engine
 from ..models.users_model import User 
 
 from ..core.config import settings 
-from ..core.security import hash_password , verfiy_password
+from ..core.security import hash_password , verify_password
 
 
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/auth",
+    tags=["Authentication"]
+)
 
 
-
-@router.put("/login/auth" , response_model=UserResponse )
+@router.post("/register" , response_model=UserResponse )
 async def login_section (user: UserCreate , db : AsyncSession=Depends(get_db)):
     db_user =User(
         email = user.email,

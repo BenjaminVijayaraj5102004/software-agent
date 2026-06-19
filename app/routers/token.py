@@ -1,24 +1,29 @@
-from fastapi import APIRouter ,Depends ,HTTPException
-from ..schema.token import Token
-from ..core.security import create_access_token,verfiy_password
-from ..models.users_model import User
-from ..db.database import get_db , Base , engine
-from sqlalchemy.ext.asyncio import AsyncSession
-from ..core.security import oauth2_scheme
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+
+from ..schema.token import Token
+from ..models.users_model import User
+from ..db.database import get_db
+from ..core.security import (
+    create_access_token,
+    verify_password,
+    oauth2_scheme
+)
+
 router = APIRouter()
 
-@router.post("/login/Token" , response_model=Token )
 
+@router.post("/login/Token", response_model=Token)
 async def check_authention(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: AsyncSession = Depends(get_db)
-    
 ):
-    result = (
-       await db.execute(
-        select(User).where(User.email == form_data.username)
+
+    result = await db.execute(
+        select(User).where(
+            User.email == form_data.username
         )
     )
 
@@ -30,7 +35,7 @@ async def check_authention(
             detail="Invalid email"
         )
 
-    if not verfiy_password(
+    if not verify_password(
         form_data.password,
         db_user.password_hash
     ):
@@ -47,8 +52,6 @@ async def check_authention(
         "access_token": access_token,
         "token_type": "bearer"
     }
-
-
 
 
 @router.get("/me")
