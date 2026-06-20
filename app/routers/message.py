@@ -37,7 +37,7 @@ async def create_message(
             detail="Conversation not found"
         )
 
-    # Save user message
+  
     user_message = Message(
         conversation_id=conversation_id,
         role="user",
@@ -47,10 +47,10 @@ async def create_message(
     db.add(user_message)
     await db.commit()
 
-    # Generate AI response
+
     ai_response = chat(message.content)
 
-    # Save assistant response
+
     assistant_message = Message(
         conversation_id=conversation_id,
         role="assistant",
