@@ -6,8 +6,10 @@ from ..models.users_model import User
 
 from ..core.config import settings 
 from ..core.security import hash_password , verify_password
+from ..repository.userautentication_repo import userauthentication
 
 
+user_repo = userauthentication()
 
 router = APIRouter(
     prefix="/auth",
@@ -17,13 +19,10 @@ router = APIRouter(
 
 @router.post("/register" , response_model=UserResponse )
 async def login_section (user: UserCreate , db : AsyncSession=Depends(get_db)):
-    db_user =User(
+    db_user = await user_repo.user_auth(
+        db=db,
         email = user.email,
-        password_hash= hash_password(user.password)
+        password_hash = user.password
     )
-    db.add(db_user)
-    await db.commit()
-    await db.refresh(db_user)
-    
-    
+
     return db_user

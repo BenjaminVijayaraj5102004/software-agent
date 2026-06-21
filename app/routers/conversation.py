@@ -5,15 +5,17 @@ from sqlalchemy import select
 from ..Agents.test_Agent import chat
 from ..db.database import get_db
 from ..models.conversation_model import Conversation
-from ..schema.conversation_schema import (
-    ConversationCreate,
-    ConversationResponse
-)
+from ..schema.conversation_schema import ConversationCreate,ConversationResponse
 from ..core.security import CurrentUser
+from ..repository.conversation_repo import ConversationRepository
+
 
 router = APIRouter(
     tags=["Conversation"]
 )
+
+
+conversation_repo= ConversationRepository()
 
 
 @router.post(
@@ -29,15 +31,11 @@ async def create_conversation(
     
 ):
     
-    db_conversation = Conversation(
-        title= conversation.title,
+    return await conversation_repo.create_conversation(
+        db=db,
+        title = conversation.title,
         user_id = currents.id
     )
-    db.add(db_conversation)
-    await db.commit()
-    await db.refresh(db_conversation)
-    return db_conversation
-
 
 @router.get(
     "/api/conversation",
@@ -47,13 +45,11 @@ async def get_conversations(
     currents: CurrentUser,
     db: AsyncSession = Depends(get_db)
 ):
-    result = await db.execute(
-        select(Conversation)
-        .where(Conversation.user_id == currents.id)
-        .order_by(Conversation.updated_at.desc())
+    
+    return await conversation_repo.get_conversations_list(
+        db=db,
+        user_id = currents.id
     )
-
-    return result.scalars().all()
 
 @router.get(
     "/api/conversation/{conversation_id}",
@@ -64,14 +60,12 @@ async def get_conversation(
     currents: CurrentUser,
     db: AsyncSession = Depends(get_db)
 ):
-    result = await db.execute(
-        select(Conversation).where(
-            Conversation.id == conversation_id,
-            Conversation.user_id == currents.id
-        )
-    )
 
-    conversation = result.scalar_one_or_none()
+    conversation = await conversation_repo.get_conversation_by_id(
+        db=db,
+        conversation_id=conversation_id,
+        user_id=currents.id
+    )
 
     if conversation is None:
         raise HTTPException(
@@ -87,23 +81,18 @@ async def delete_conversation(
     currents: CurrentUser,
     db: AsyncSession = Depends(get_db)
 ):
-    result = await db.execute(
-        select(Conversation).where(
-            Conversation.id == conversation_id,
-            Conversation.user_id == currents.id
-        )
-    )
 
-    conversation = result.scalar_one_or_none()
+    conversation = await conversation_repo.delete_conversation_by_id(
+        db=db,
+        conversation_id=conversation_id,
+        user_id=currents.id
+    )
 
     if conversation is None:
         raise HTTPException(
             status_code=404,
             detail="Conversation not found"
         )
-
-    await db.delete(conversation)
-    await db.commit()
 
     return {
         "message": "Conversation deleted successfully"
