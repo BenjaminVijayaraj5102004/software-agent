@@ -1,9 +1,5 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import (
-    HumanMessage,
-    AIMessage,
-    SystemMessage,
-)
+from langchain_core.messages import HumanMessage , AIMessage , SystemMessage
 
 from ..core.config import settings
 
@@ -13,10 +9,7 @@ model = ChatGoogleGenerativeAI(
     google_api_key=settings.GOOGLE_API_KEY,
 )
 
-async def chat(
-    conversation_history: list,
-    user_name: str | None = None,
-) -> str:
+async def chat(conversation_history: list,user_name: str | None = None) -> str:
 
     system_prompt = "You are a helpful AI assistant."
 
@@ -38,3 +31,6 @@ async def chat(
     response = await model.ainvoke(messages)
 
     return response.content
+
+
+

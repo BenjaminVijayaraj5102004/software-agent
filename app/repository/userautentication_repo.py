@@ -6,10 +6,9 @@ from ..core.security import hash_password
 
 
 class userauthentication:
-    async def user_auth(self, db: AsyncSession, email: EmailStr, name: str, password_hash: str):
+    async def user_auth(self, db: AsyncSession, email: EmailStr, password_hash: str, name: str = None):
         db_user = User(
             email=email,
-            name=name,
             password_hash=hash_password(password_hash)
         )
 

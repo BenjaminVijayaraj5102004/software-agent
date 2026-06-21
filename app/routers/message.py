@@ -1,16 +1,12 @@
 from uuid import UUID
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from ..Agents.test_Agent import chat
 from ..core.security import CurrentUser
 from ..db.database import get_db
 from ..repository.message_repo import MessageRepository
-from ..schema.message_schema import (
-    MessageCreate,
-    MessageResponse,
-)
+from ..schema.message_schema import  MessageCreate,MessageResponse
+
 
 router = APIRouter(tags=["Message"])
 
@@ -40,7 +36,7 @@ async def create_message(
             detail="Conversation not found",
         )
 
-    # Save user message
+
     await message_repo.create_message(
         db=db,
         conversation_id=conversation_id,
@@ -48,7 +44,7 @@ async def create_message(
         content=message.content,
     )
 
-    # Fetch latest conversation (includes current message)
+   
     history = await message_repo.get_recent_messages(
         db=db,
         conversation_id=conversation_id,

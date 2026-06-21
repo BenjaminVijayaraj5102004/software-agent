@@ -14,8 +14,9 @@ class MessageResponse(BaseModel):
     role: str
     content: str
     token_count: int | None = None
-
-    class Config:
-        from_attributes = True
+    
+    model_config = {
+        "from_attributes": True
+    }
 
 
