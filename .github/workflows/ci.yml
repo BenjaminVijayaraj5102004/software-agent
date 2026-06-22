@@ -70,6 +70,24 @@ jobs:
 
             asyncio.run(main())
             EOF
+      - name: Create database tables
+        run: |
+          uv run python - <<'EOF'
+          import asyncio
+
+          from app.db.database import engine, Base
+
+          # Import every model so SQLAlchemy knows about them
+          from app.models.user import User
+          from app.models.conversation import Conversation
+          from app.models.message import Message
+
+          async def main():
+              async with engine.begin() as conn:
+                  await conn.run_sync(Base.metadata.create_all)
+
+          asyncio.run(main())
+          EOF
 
       - name: Run tests
         run: uv run pytest
