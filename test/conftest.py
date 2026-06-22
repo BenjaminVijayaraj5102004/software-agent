@@ -25,7 +25,7 @@ async def client():
 
 
 
-@pytest_asyncio.mark
+@pytest_asyncio.fixture
 async def test_login(client):
     response = await client.post(
         "/register",
