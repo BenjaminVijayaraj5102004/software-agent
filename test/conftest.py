@@ -30,8 +30,8 @@ async def access_token(client: AsyncClient):
     response = await client.post(
         "/login/Token",
         data={
-            "username": "test1@gmail.com",
-            "password": "test12004",
+            "username": "test2@gmail.com",
+            "password": "test22004",
         },
     )
 
