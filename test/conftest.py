@@ -49,7 +49,7 @@ async def access_token(client: AsyncClient):
 
 
 
-    return response.json()["access_token"]
+   
 
 
 
@@ -66,4 +66,3 @@ async def conversation_id(client, access_token):
     )
 
 
-    return response.json()["id"]
