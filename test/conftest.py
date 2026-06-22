@@ -1,3 +1,4 @@
+import pytest
 import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 
@@ -22,6 +23,17 @@ async def client():
     ) as client:
         yield client
 
+
+
+@pytest_asyncio.mark
+async def test_login(client):
+    response = await client.post(
+        "/register",
+        json={ 
+            "email": "test2@gmail.com",
+            "password": "test22004"
+        }
+    )
 
 
 @pytest_asyncio.fixture
