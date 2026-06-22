@@ -50,7 +50,7 @@ jobs:
     
       
       - name: Test database connection
-          run: |
+        run: |
             uv run python - <<'EOF'
             import asyncio
             import os
