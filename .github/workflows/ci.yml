@@ -48,28 +48,6 @@ jobs:
       - name: Install dependencies
         run: uv sync
     
-      
-      - name: Test database connection
-        run: |
-            uv run python - <<'EOF'
-            import asyncio
-            import os
-            from sqlalchemy.ext.asyncio import create_async_engine
-            from sqlalchemy import text
-
-            async def main():
-                print("DB_URL:", os.environ["DB_URL"])
-
-                engine = create_async_engine(os.environ["DB_URL"])
-
-                async with engine.begin() as conn:
-                    await conn.execute(text("SELECT 1"))
-
-                await engine.dispose()
-                print("✅ Database connection successful")
-
-            asyncio.run(main())
-            EOF
       - name: Create database tables
         run: |
           uv run python - <<'EOF'
