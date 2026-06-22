@@ -78,7 +78,7 @@ jobs:
           from app.db.database import engine, Base
 
           # Import every model so SQLAlchemy knows about them
-          from app.models.user_model import User
+          from app.models.users_model import User
           from app.models.conversation_model import Conversation
           from app.models.messages_model import Message
 
