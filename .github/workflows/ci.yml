@@ -47,11 +47,11 @@ jobs:
 
       - name: Install dependencies
         run: uv sync
-        run: uv run python
+    
       
       - name: Test database connection
         run: |
-          python - <<'EOF'
+          uv run python - <<'EOF'
           import asyncio
           from sqlalchemy.ext.asyncio import create_async_engine
           import os
