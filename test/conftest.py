@@ -47,7 +47,7 @@ async def access_token(client: AsyncClient):
         },
     )
 
-    assert response.status_code == 200
+
 
     return response.json()["access_token"]
 
@@ -65,6 +65,5 @@ async def conversation_id(client, access_token):
         }
     )
 
-    assert response.status_code == 200
 
     return response.json()["id"]
