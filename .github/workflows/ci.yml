@@ -47,6 +47,7 @@ jobs:
 
       - name: Install dependencies
         run: uv sync
+        run: uv run python
       
       - name: Test database connection
         run: |
@@ -63,7 +64,7 @@ jobs:
               print("Database connection successful")
 
           asyncio.run(main())
-          EO
-          
+          EOF
+
       - name: Run tests
         run: uv run pytest
