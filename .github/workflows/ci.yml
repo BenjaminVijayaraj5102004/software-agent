@@ -48,24 +48,9 @@ jobs:
       - name: Install dependencies
         run: uv sync
     
-      - name: Create database tables
-        run: |
-          uv run python - <<'EOF'
-          import asyncio
-
-          from app.db.database import engine, Base
-
-          # Import every model so SQLAlchemy knows about them
-          from app.models.users_model import User
-          from app.models.conversation_model import Conversation
-          from app.models.messages_model import Message
-
-          async def main():
-              async with engine.begin() as conn:
-                  await conn.run_sync(Base.metadata.create_all)
-
-          asyncio.run(main())
-          EOF
+      - name: Run migrations
+        run: uv run alembic upgrade head
+  
 
       - name: Run tests
         run: uv run pytest
