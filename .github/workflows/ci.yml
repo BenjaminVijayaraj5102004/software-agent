@@ -47,6 +47,23 @@ jobs:
 
       - name: Install dependencies
         run: uv sync
+      
+      - name: Test database connection
+        run: |
+          python - <<'EOF'
+          import asyncio
+          from sqlalchemy.ext.asyncio import create_async_engine
+          import os
 
+          async def main():
+              print("DB_URL:", os.environ["DB_URL"])
+              engine = create_async_engine(os.environ["DB_URL"])
+              async with engine.begin() as conn:
+                  await conn.execute("SELECT 1")
+              print("Database connection successful")
+
+          asyncio.run(main())
+          EO
+          
       - name: Run tests
         run: uv run pytest
