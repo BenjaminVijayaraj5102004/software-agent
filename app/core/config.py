@@ -3,7 +3,7 @@ from pydantic import SecretStr
 class Settings(BaseSettings):
     DB_URL : str
     SECRET_KEY : SecretStr
-    GOOGLE_API_KEY : str
+    OPENAI_API_KEY : str
     algorithm : str ="HS256"
     access_token_expire_minutes : int = 30
     model_config = SettingsConfigDict(
