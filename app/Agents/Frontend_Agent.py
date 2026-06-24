@@ -9,10 +9,10 @@ model = ChatOpenAI(
     base_url="https://zenmux.ai/api/v1",
     openai_api_key=settings.OPENAI_API_KEY,
 )
-
 async def chat(conversation_history: list,user_name: str | None = None) -> str:
 
-    system_prompt = """---
+    system_prompt =""" 
+            ---
             name: frontend-design
             description: Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.
             license: Complete terms in LICENSE.txt
@@ -54,14 +54,9 @@ async def chat(conversation_history: list,user_name: str | None = None) -> str:
             **IMPORTANT**: Match implementation complexity to the aesthetic vision. Maximalist designs need elaborate code with extensive animations and effects. Minimalist or refined designs need restraint, precision, and careful attention to spacing, typography, and subtle details. Elegance comes from executing the vision well.
 
             Remember: Claude is capable of extraordinary creative work. Don't hold back, show what can truly be created when thinking outside the box and committing fully to a distinctive vision.
-"""
 
-    if user_name:
-        system_prompt += (
-            f" The user's name is {user_name}. "
-            "Use their name naturally when appropriate."
-        )
-
+        """
+    
     messages = [SystemMessage(content=system_prompt)]
 
     for msg in conversation_history:
@@ -74,6 +69,3 @@ async def chat(conversation_history: list,user_name: str | None = None) -> str:
     response = await model.ainvoke(messages)
 
     return response.content
-
-
-
