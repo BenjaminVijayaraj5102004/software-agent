@@ -1,0 +1,44 @@
+# Version control
+.git
+.github
+.gitignore
+
+# Python artifacts
+__pycache__
+*.py[cod]
+*.pyo
+*.egg-info
+build/
+dist/
+wheels/
+
+# Virtual environments
+.venv
+
+# Environment / secrets (injected via compose)
+.env
+secrets/
+
+# IDE & editor configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing & caches
+.pytest_cache
+.coverage
+htmlcov/
+
+
+# Docker files (no need to copy themselves)
+Dockerfile
+compose.yml
+.dockerignore
+
+# Output artifacts
+Output/
+
+# OS files
+Thumbs.db
+.DS_Store
