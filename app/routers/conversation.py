@@ -37,6 +37,7 @@ async def create_conversation(
         user_id = currents.id
     )
 
+
 @router.get(
     "/api/conversation",
     response_model=list[ConversationResponse]

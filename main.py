@@ -9,20 +9,22 @@ from app.routers.authentication import router as authentication
 from app.routers.token import router as Token
 from app.routers.conversation import router as conversation
 from app.routers.message import router as Messages
+from app.Mcp.client import get_tools
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-
     yield
 
 
-
 app = FastAPI(lifespan=lifespan)
+
+
 
 app.include_router(authentication)
 app.include_router(Token)
 app.include_router(conversation)
 app.include_router(Messages)
+
 
