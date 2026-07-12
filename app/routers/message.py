@@ -1,7 +1,7 @@
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..Agents.Frontend_Agent import chat
+from ..Agents.main import chat
 from ..core.security import CurrentUser
 from ..db.database import get_db
 from ..repository.message_repo import MessageRepository

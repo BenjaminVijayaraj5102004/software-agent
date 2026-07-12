@@ -17,6 +17,7 @@ dependencies = [
     "langchain-openai>=1.3.2",
     "langchain[google-genai,ollama]>=1.3.10",
     "langgraph>=1.2.6",
+    "langgraph-supervisor>=0.0.31",
     "mcp[cli]>=1.28.1",
     "mylib>=0.0.1",
     "openai>=2.43.0",
