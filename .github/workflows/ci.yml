@@ -3,10 +3,10 @@ name: Software_Agent CI
 on:
   push:
     branches:
-      - main
+      - Agent
   pull_request:
     branches:
-      - main
+      - Agent
 
 jobs:
   test:
