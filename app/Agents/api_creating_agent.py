@@ -29,8 +29,42 @@ async def init_agent():
         """
     )
 
+    graphl_agent = create_react_agent(
+        model=chat_ollama,
+        tools=my_tools,
+        name="GRAPHQL_AGENT",
+        prompt="""
+        You are a GraphQL API implementation agent.
+
+        Never write FastAPI code from your own knowledge.
+
+        If the request requires creating or modifying code, ALWAYS use one of your available tools.
+
+        Only respond directly after all required tools have been executed.
+
+        When finished, transfer back to the supervisor.
+        """
+    )
+
+    gRPC_agent = create_react_agent(
+        model=chat_ollama,
+        tools=my_tools,
+        name="gRPC_AGENT",
+        prompt="""
+        You are a gRPC API implementation agent.
+
+        Never write FastAPI code from your own knowledge.
+
+        If the request requires creating or modifying code, ALWAYS use one of your available tools.
+
+        Only respond directly after all required tools have been executed.
+
+        When finished, transfer back to the supervisor.
+        """
+    )
+
     api_endpoints = create_supervisor(
-        [rest_agent],
+        [rest_agent, graphl_agent, gRPC_agent],
         model=chat_ollama,
         prompt="""
         You are an API endpoint supervisor.
