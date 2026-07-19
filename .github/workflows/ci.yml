@@ -46,8 +46,11 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
+      - name: Check Alembic
+        run: uv run alembic history
+
       - name: Run migrations
         run: uv run alembic upgrade head
 
       - name: Run tests
-        run: uv run pytest
+        run: uv run pytest -q
