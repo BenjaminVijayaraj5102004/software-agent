@@ -11,7 +11,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     services:
       postgres:
         image: postgres:16
@@ -22,16 +22,14 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U postgres"
+          --health-cmd="pg_isready -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }}"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
 
-
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       DB_URL: postgresql+asyncpg://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     steps:
       - name: Checkout code
@@ -47,10 +45,9 @@ jobs:
 
       - name: Install dependencies
         run: uv sync
-    
+
       - name: Run migrations
         run: uv run alembic upgrade head
-  
 
       - name: Run tests
-        run: uv run 
+        run: uv run pytest
