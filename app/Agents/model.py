@@ -1,5 +1,6 @@
 import json
 from langchain_ollama import ChatOllama
+
 class MODEL():
     MODEL_NAME = "OLLAMA"
 
@@ -12,19 +13,21 @@ models = MODEL("qwen2.5-coder:7b", 0.7)
 
 
 class PatchedOllama(ChatOllama):
+    tool_names: list = []
+
     def invoke(self, *args, **kwargs):
         response = super().invoke(*args, **kwargs)
      
-        if isinstance(response.content, str) and "transfer_to_rest_agent" in response.content:
+        if isinstance(response.content, str) and any(tool in response.content for tool in self.tool_names):
             try:
              
                 content = response.content.strip()
                 if content.startswith("```json"):
                     content = content[7:-3].strip()
                 data = json.loads(content)
-                if data.get("name") == "transfer_to_rest_agent":
+                if data.get("name") in self.tool_names:
                     response.tool_calls = [{
-                        "name": "transfer_to_rest_agent",
+                        "name": data.get("name"),
                         "args": data.get("arguments", {}),
                         "id": "call_patched_1"
                     }]
@@ -33,4 +36,8 @@ class PatchedOllama(ChatOllama):
                 pass
         return response
 
-chat_ollama = PatchedOllama(model=models.model, temperature=models.temp)
+chat_ollama = PatchedOllama(
+    model=models.model, 
+    temperature=models.temp
+)
+

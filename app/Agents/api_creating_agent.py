@@ -12,6 +12,8 @@ async def init_agent():
 
     my_tools = await get_filtered_tools()
 
+
+  
     rest_agent = create_react_agent(
         model=chat_ollama,
         tools=my_tools,
@@ -63,8 +65,14 @@ async def init_agent():
         """
     )
 
+    available_agent_list=[
+        rest_agent, 
+        graphl_agent, 
+        gRPC_agent,
+    ]
+
     api_endpoints = create_supervisor(
-        [rest_agent, graphl_agent, gRPC_agent],
+        available_agent_list,
         model=chat_ollama,
         prompt="""
         You are an API endpoint supervisor.
