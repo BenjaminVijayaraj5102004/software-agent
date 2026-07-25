@@ -10,14 +10,12 @@ from app.routers.token import router as Token
 from app.routers.conversation import router as conversation
 from app.routers.message import router as Messages
 from app.Mcp.client import get_tools
-from app.Agents.api_creating_agent import init_agent
+from app.Agents.main import init_agent
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_agent()
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
     yield
 
 

@@ -20,58 +20,58 @@ async def init_agent():
   
     my_tools = await get_filtered_tools()
 
-    rest_agent = create_react_agent(
+    RDMS_AGENT = create_react_agent(
         model=chat_ollama,
         tools=my_tools,
-        name="REST_AGENT",
-        prompt="""You are a REST API implementation agent.
-        Never write FastAPI code from your own knowledge.
+        name="RDMS_AGENT",
+        prompt="""You are a RDMS API implementation agent.
+        Never write (mysql , postgres) code from your own knowledge.
         If the request requires creating or modifying code, ALWAYS use one of your available tools.
         Only respond directly after all required tools have been executed."""
     )
 
-    graphql_agent = create_react_agent(
+    NoSQL_AGENT = create_react_agent(
         model=chat_ollama,
         tools=my_tools,
-        name="GRAPHQL_AGENT",
-        prompt="""You are a GraphQL API implementation agent.
-        Never write FastAPI code from your own knowledge.
+        name="NoSQL_AGENT",
+        prompt="""You are a NoSQL API implementation agent.
+        Never write monogdb code from your own knowledge.
         If the request requires creating or modifying code, ALWAYS use one of your available tools.
         Only respond directly after all required tools have been executed."""
     )
 
-    grpc_agent = create_react_agent(
+    redis_agent = create_react_agent(
         model=chat_ollama,
         tools=my_tools,
-        name="gRPC_AGENT",
-        prompt="""You are a gRPC API implementation agent.
-        Never write FastAPI code from your own knowledge.
+        name="redis_AGENT",
+        prompt="""You are a redis API implementation agent.
+        Never write redis code from your own knowledge.
         If the request requires creating or modifying code, ALWAYS use one of your available tools.
         Only respond directly after all required tools have been executed."""
     )
 
   
-    api_subagents = [
+    database_subagents = [
         CompiledSubAgent(
-            name="rest-agent",
-            description="Handles REST API implementation requests.",
-            runnable=rest_agent
+            name="RDMS_AGENT",
+            description="Handles RDMS API implementation requests.",
+            runnable=RDMS_AGENT
         ),
         CompiledSubAgent(
-            name="graphql-agent",
-            description="Handles GraphQL API implementation requests.",
-            runnable=graphql_agent
+            name="NoSQL_AGENT",
+            description="Handles NoSQL API implementation requests.",
+            runnable=NoSQL_AGENT
         ),
         CompiledSubAgent(
-            name="grpc-agent",
-            description="Handles gRPC API implementation requests.",
-            runnable=grpc_agent
-        ),
+            name ="Redis_AGENT",
+            description="Handles Redis API implementation requests.",
+            runnable=redis_agent
+        )
     ]
 
-    api_supervisor_graph = create_deep_agent(
+    db_supervisor_graph = create_deep_agent(
         model=chat_ollama,
-        subagents=api_subagents,
+        subagents=database_subagents,
         system_prompt="""You are an API endpoint supervisor.
         Your job is to coordinate and delegate the user's request to the correct subagent using your task tool."""
     )
@@ -79,18 +79,19 @@ async def init_agent():
     
     main_subagents = [
         CompiledSubAgent(
-            name="api-creator-supervisor",
+            name="db-creator-supervisor",
             description="Use this agent to create, manage, or implement any API endpoints (REST, GraphQL, gRPC).",
-            runnable=api_supervisor_graph
+            runnable=db_supervisor_graph
         )
     ]
 
+   
 
     main_supervisor = create_deep_agent(
         subagents=main_subagents,
         model=chat_ollama,
         system_prompt="""Your role is to send information to subagents, get back the answer, and send it to the user.
-        Workflow: user input -> main_supervisor -> api-creator-supervisor -> user output""",
+        Workflow: user input -> main_supervisor -> DB-creator-supervisor -> user output""",
         
     )
 

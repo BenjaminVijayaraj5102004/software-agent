@@ -8,7 +8,7 @@ class MODEL():
         self.model = model
         self.temp = temp
 
-models = MODEL("qwen2.5-coder:7b", 0.7)
+models = MODEL("qwen2.5-coder:7b", 0)
 
 
 
