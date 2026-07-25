@@ -1,4 +1,3 @@
-from deepagents.middleware import subagents
 import asyncio
 from langchain.messages import HumanMessage, AIMessage
 from . import api_creating_agent
@@ -38,7 +37,7 @@ async def init_agent():
     )
 
 
-async def chat(conversation_history: list, user_name = None  | None, thread_id: str = "default_thread") -> str:
+async def chat(conversation_history: list, user_name = str | None) -> str:
     global app
     if app is None:
         raise RuntimeError("Agent graph not initialized. Call init_agent() first.")
@@ -51,12 +50,9 @@ async def chat(conversation_history: list, user_name = None  | None, thread_id: 
             messages.append(AIMessage(content=msg.content))
 
    
-    config = {"configurable": {"thread_id": thread_id}}
 
- 
     response = await app.ainvoke(
         {"messages": messages},
-        config
     )
 
     return response["messages"][-1].content

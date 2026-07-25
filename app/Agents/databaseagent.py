@@ -1,12 +1,6 @@
 import asyncio
-from platform import system
-from typing import Annotated, TypedDict
-
-from psycopg_pool import AsyncConnectionPool
-from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from langgraph.prebuilt import create_react_agent
 from deepagents import create_deep_agent, CompiledSubAgent
-from langchain.messages import HumanMessage, AIMessage
 from .model import chat_ollama
 from .tools import get_filtered_tools
 from ..core.config import settings
