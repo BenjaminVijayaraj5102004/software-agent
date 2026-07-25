@@ -1,7 +1,7 @@
 import asyncio
 from langgraph.prebuilt import create_react_agent
 from deepagents import create_deep_agent, CompiledSubAgent
-from .model import chat_ollama
+from .model import coder_ollama , tool_ollama
 from .tools import get_filtered_tools
 from ..core.config import settings
 
@@ -15,7 +15,7 @@ async def init_agent():
     my_tools = await get_filtered_tools()
 
     RDMS_AGENT = create_react_agent(
-        model=chat_ollama,
+        model=coder_ollama,
         tools=my_tools,
         name="RDMS_AGENT",
         prompt="""You are a RDMS API implementation agent.
@@ -25,7 +25,7 @@ async def init_agent():
     )
 
     NoSQL_AGENT = create_react_agent(
-        model=chat_ollama,
+        model=coder_ollama,
         tools=my_tools,
         name="NoSQL_AGENT",
         prompt="""You are a NoSQL API implementation agent.
@@ -35,7 +35,7 @@ async def init_agent():
     )
 
     redis_agent = create_react_agent(
-        model=chat_ollama,
+        model=coder_ollama,
         tools=my_tools,
         name="redis_AGENT",
         prompt="""You are a redis API implementation agent.
@@ -64,7 +64,7 @@ async def init_agent():
     ]
 
     db_supervisor_graph = create_deep_agent(
-        model=chat_ollama,
+        model=tool_ollama,
         subagents=database_subagents,
         system_prompt="""You are an API endpoint supervisor.
         Your job is to coordinate and delegate the user's request to the correct subagent using your task tool."""
@@ -83,7 +83,7 @@ async def init_agent():
 
     main_supervisor = create_deep_agent(
         subagents=main_subagents,
-        model=chat_ollama,
+        model=tool_ollama,
         system_prompt="""Your role is to send information to subagents, get back the answer, and send it to the user.
         Workflow: user input -> main_supervisor -> DB-creator-supervisor -> user output""",
         

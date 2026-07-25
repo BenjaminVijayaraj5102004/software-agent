@@ -9,7 +9,7 @@ class MODEL():
         self.temp = temp
 
 models = MODEL("qwen2.5-coder:7b", 0)
-
+models1 = MODEL("qwen3:8b",0)
 
 
 class PatchedOllama(ChatOllama):
@@ -36,8 +36,13 @@ class PatchedOllama(ChatOllama):
                 pass
         return response
 
-chat_ollama = PatchedOllama(
+coder_ollama = PatchedOllama(
     model=models.model, 
     temperature=models.temp
+)
+
+tool_ollama = PatchedOllama(
+    model =  models1.model,
+    temperature = models1.temp
 )
 

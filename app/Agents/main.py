@@ -2,7 +2,7 @@ import asyncio
 from langchain.messages import HumanMessage, AIMessage
 from . import api_creating_agent
 from . import databaseagent
-from .model import chat_ollama
+from .model import tool_ollama
 from deepagents import create_deep_agent, CompiledSubAgent
 app = None
 
@@ -17,7 +17,7 @@ async def init_agent():
     )
 
     app = create_deep_agent(
-        model=chat_ollama,
+        model=tool_ollama,
         subagents=[
             CompiledSubAgent(
                 name="database-supervisor",
@@ -33,6 +33,10 @@ async def init_agent():
         system_prompt="""
         Delegate database work to database-supervisor.
         Delegate API work to api-supervisor.
+
+        output format:
+            return a clean text insted of a json format 
+            the output need to be code alone 
         """,
     )
 
