@@ -5,10 +5,37 @@ llm = "ollama:qwen3-coder:30b"
 _agent = None
 
 
+def _patch_middleware_deduplication():
+    """Ensure deepagents and langchain factory handle duplicate middleware names gracefully."""
+    try:
+        import deepagents.graph
+        import langchain.agents.factory
+
+        orig_create_agent = langchain.agents.factory.create_agent
+
+        def _dedup_create_agent(*args, **kwargs):
+            if "middleware" in kwargs and kwargs["middleware"]:
+                seen = set()
+                deduped = []
+                for m in kwargs["middleware"]:
+                    name = getattr(m, "name", type(m).__name__)
+                    if name not in seen:
+                        seen.add(name)
+                        deduped.append(m)
+                kwargs["middleware"] = deduped
+            return orig_create_agent(*args, **kwargs)
+
+        deepagents.graph.create_agent = _dedup_create_agent
+        langchain.agents.factory.create_agent = _dedup_create_agent
+    except Exception:
+        pass
+
+
 def get_agent():
     global _agent
     if _agent is None:
         try:
+            _patch_middleware_deduplication()
             from engineeringstack import create_engineering_stack
             _agent = create_engineering_stack(model=llm)
         except ImportError as e:
