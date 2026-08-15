@@ -11,7 +11,7 @@ from ..models.users_model import User
 from ..core.security import verify_access_token
 from ..repository.conversation_repo import ConversationRepository
 from ..repository.message_repo import MessageRepository
-from services.Agent import chat
+from ..services.Agent import chat
 
 conversation_repo = ConversationRepository()
 message_repo = MessageRepository()

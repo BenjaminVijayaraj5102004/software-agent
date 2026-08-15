@@ -1,8 +1,7 @@
 from uuid import UUID
 from fastapi import APIRouter, Depends ,HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from services.Agent import chat
+from ..services.Agent import chat
 from ..db.database import get_db
 from ..models.conversation_model import Conversation
 from ..schema.conversation_schema import ConversationCreate,ConversationResponse
