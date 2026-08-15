@@ -12,3 +12,11 @@ wheels/
 .venv
 .env
 secrets/
+
+
+
+#folders/png
+image.png
+.antman_session.json
+agent_image.png
+mcp.json

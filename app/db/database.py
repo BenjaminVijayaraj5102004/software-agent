@@ -5,7 +5,7 @@ from sqlalchemy.engine import URL
 from ..core.config import settings
 
 
-engine = create_async_engine(settings.DB_URL, echo=True)
+engine = create_async_engine(settings.DB_URL, echo=False)
 
 SessionLocal = async_sessionmaker(
     engine,
