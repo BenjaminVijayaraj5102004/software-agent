@@ -6,17 +6,17 @@ dist/
 wheels/
 *.egg-info
 
-
-
-# Virtual environments
+# Virtual environments & secrets
 .venv
 .env
 secrets/
 
-
-
-#folders/png
-image.png
+# Session & configuration files
 .antman_session.json
-agent_image.png
 mcp.json
+
+# Images
+image.png
+agent_image.png
+*.png
+
