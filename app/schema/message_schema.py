@@ -4,7 +4,7 @@ from uuid import UUID
 
 
 class MessageCreate(BaseModel):
-    role: Literal["user","assistant"]
+    role: Literal["user", "assistant"] = "user"
     content: str 
 
 class MessageResponse(BaseModel):
