@@ -20,3 +20,6 @@ image.png
 agent_image.png
 *.png
 
+#folders
+/.agents/*
+/.claude/*
