@@ -20,6 +20,9 @@ image.png
 agent_image.png
 *.png
 
-#folders
-/.agents/*
-/.claude/*
+# AI & Agent Configuration Directories
+.agents/
+.claude/
+.agents
+.claude
+
